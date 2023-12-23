@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Icon, IconButton, PaperProvider, Text } from "react-native-paper";
 import { Stopwatch } from "react-native-stopwatch-timer";
-import { convertMillisecondsToTime } from "./src/components/utils/convertMillisecondsToTime";
+import { convertMillisecondsToTime } from "./src/utils/convertMillisecondsToTime";
 import { Linking } from "react-native";
 
 export default function App() {
@@ -133,12 +133,7 @@ export default function App() {
           <IconButton
             icon="restart"
             mode="contained"
-            disabled={
-              stopwatchStart === false &&
-              stopwatchRef.current.state.elapsed === 0
-                ? true
-                : false
-            }
+            disabled={stopwatchStart === false ? true : false}
             size={50}
             onPress={() => resetStopwatch()}
           />
