@@ -1,16 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { useRef, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
-import { Icon, IconButton, PaperProvider, Text } from "react-native-paper";
-import { Stopwatch } from "react-native-stopwatch-timer";
+import { StyleSheet, View, FlatList, SafeAreaView } from "react-native";
+import { IconButton, PaperProvider } from "react-native-paper";
 import { convertMillisecondsToTime } from "./src/utils/convertMillisecondsToTime";
-import { Linking } from "react-native";
+import { GithubUser, RenderLapItem, Stopwatch } from "./src/components";
 
 export default function App() {
   const stopwatchRef = useRef(null);
@@ -36,100 +29,28 @@ export default function App() {
   };
 
   const renderLapItem = ({ item, index }) => {
-    return (
-      <View
-        key={index}
-        style={{
-          paddingTop: 8,
-          paddingLeft: 10,
-          paddingRight: 10,
-        }}
-      >
-        <View
-          style={{
-            padding: 8,
-            height: 60,
-            justifyContent: "space-between",
-            backgroundColor: "#EBDEFA",
-            flexDirection: "row",
-            alignItems: "center",
-            borderRadius: 8,
-          }}
-          icon="timer"
-        >
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Icon color="#6B4FAA" source="timer" size={20} />
-            <Text
-              variant="titleMedium"
-              style={{ fontWeight: "bold", marginLeft: 4 }}
-            >
-              Lap {laps.length - index}:
-            </Text>
-          </View>
-          <Text variant="titleMedium">{item}</Text>
-        </View>
-      </View>
-    );
-  };
-
-  const options = {
-    container: {
-      borderRadius: 5,
-    },
-    text: {
-      fontWeight: "bold",
-      fontSize: 40,
-      color: "#FFF",
-      letterSpacing: 4,
-    },
+    return <RenderLapItem item={item} index={index} laps={laps} />;
   };
 
   return (
     <PaperProvider>
       <StatusBar backgroundColor="#6B4FAA" barStyle="light-content" />
       <SafeAreaView style={styles.container}>
-        <View
-          style={{
-            width: "100%",
-            height: 80,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Stopwatch
-            laps
-            msecs
-            start={stopwatchStart}
-            reset={stopwatchReset}
-            options={options}
-            ref={stopwatchRef}
-          />
-        </View>
+        <Stopwatch
+          options={styles.stopwatch.options}
+          stopwatchRef={stopwatchRef}
+          stopwatchReset={stopwatchReset}
+          stopwatchStart={stopwatchStart}
+        />
 
         <FlatList
           data={laps}
           renderItem={renderLapItem}
           keyExtractor={(item, index) => index.toString()}
-          style={{
-            borderRadius: 8,
-            backgroundColor: "#fff",
-            overflow: "hidden",
-          }}
+          style={styles.flatList}
         />
 
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            height: 120,
-            alignContent: "center",
-            alignItems: "center",
-            bottom: 0,
-            position: "relative",
-            width: "100%",
-            alignSelf: "center",
-          }}
-        >
+        <View style={styles.buttons.container}>
           <IconButton
             icon="restart"
             mode="contained"
@@ -140,7 +61,7 @@ export default function App() {
           <IconButton
             icon={stopwatchStart ? "pause" : "play"}
             mode="contained"
-            size={50}
+            size={70}
             onPress={() => toggleStopwatch()}
           />
           <IconButton
@@ -151,31 +72,7 @@ export default function App() {
             onPress={() => handleLap()}
           />
         </View>
-        <TouchableOpacity
-          style={{ flexDirection: "row" }}
-          onPress={() => {
-            Linking.openURL("https://github.com/joseLuisMtzE");
-          }}
-        >
-          <View
-            style={{
-              width: "100%",
-              alignItems: "center",
-              flexDirection: "row",
-              justifyContent: "center",
-              marginBottom: 16,
-            }}
-          >
-            <Icon color="#fff" source="github" size={20} />
-
-            <Text
-              style={{ ...styles.text, marginLeft: 2 }}
-              variant="bodyMedium"
-            >
-              joseLuisMtzE
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <GithubUser />
       </SafeAreaView>
     </PaperProvider>
   );
@@ -191,5 +88,36 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#fff",
+  },
+  buttons: {
+    container: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      height: 120,
+      alignContent: "center",
+      alignItems: "center",
+      bottom: 0,
+      position: "relative",
+      width: "100%",
+      alignSelf: "center",
+    },
+  },
+  flatList: {
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    overflow: "hidden",
+  },
+  stopwatch: {
+    options: {
+      container: {
+        borderRadius: 5,
+      },
+      text: {
+        fontWeight: "bold",
+        fontSize: 40,
+        color: "#FFF",
+        letterSpacing: 4,
+      },
+    },
   },
 });
