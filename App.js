@@ -54,7 +54,7 @@ export default function App() {
           <IconButton
             icon="restart"
             mode="contained"
-            disabled={stopwatchStart === false ? true : false}
+            disabled={stopwatchRef.current === null ? true : false}
             size={50}
             onPress={() => resetStopwatch()}
           />

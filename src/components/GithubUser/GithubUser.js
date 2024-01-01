@@ -1,10 +1,11 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { Icon, Text } from "react-native-paper";
 
 export default function GithubUser() {
   return (
     <TouchableOpacity
+      testID="github-button"
       style={{ flexDirection: "row" }}
       onPress={() => {
         Linking.openURL("https://github.com/joseLuisMtzE");
